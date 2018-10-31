@@ -1,7 +1,7 @@
 #include <windows.h>
 
 LRESULT CALLBACK 
-windowProc(HWND Window,
+WindowProc(HWND Window,
            UINT Message,
            WPARAM wParam,
            LPARAM lParam)
@@ -13,12 +13,13 @@ windowProc(HWND Window,
         {
             OutputDebugString("WM_SIZE\n");
         }break;
-        case WM_DESTORY:
+        case WM_DESTROY:
         {
             OutputDebugString("WM_DESTORY\n");
         }break;
         case WM_CLOSE:
         {
+			PostQuitMessage(0);
             OutputDebugString("WM_CLOSE\n");
         }break;
         case WM_ACTIVATEAPP:
@@ -32,14 +33,14 @@ windowProc(HWND Window,
             int X = Paint.rcPaint.left;
             int Y = Paint.rcPaint.top;
             int Width = Paint.rcPaint.right - Paint.rcPaint.left;
-            int Height = Paint.rcPaint.bottom - paint.rcPaint.top;
+            int Height = Paint.rcPaint.bottom - Paint.rcPaint.top;
             PatBlt(DeviceContext, X, Y, Width, Height,  WHITENESS);
 
             EndPaint(Window, &Paint);
         }break;
-        default
+		default:
         {
-            Result = DefWindowProc(window, message, wParam, lParam);
+            Result = DefWindowProc(Window, Message, wParam, lParam);
         }break;
     }
     return Result;
@@ -53,21 +54,22 @@ WinMain(HINSTANCE hInstance,
     WNDCLASS WindowClass = {};
 
     WindowClass.style           = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-    WindowClass.lpfnWndProc     = ;
+    WindowClass.lpfnWndProc     = WindowProc;
     WindowClass.hInstance       = hInstance; 
     WindowClass.lpszClassName   = "Handmade";
 
-    if(RegisterClass(&windowclass))
+    if(RegisterClass(&WindowClass))
     {
         HWND WindowHandle =
-            CreateWindowEx(
+            CreateWindowExA(
                   0,
                   WindowClass.lpszClassName,
+				 "Handmade Hero",
                   WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-                  WS_USEDEFAULT,
-                  WS_USEDEFAULT,
-                  WS_USEDEFAULT,
-                  WS_USEDEFAULT,
+                  CW_USEDEFAULT,
+                  CW_USEDEFAULT,
+                  CW_USEDEFAULT,
+                  CW_USEDEFAULT,
                   0,
                   0,
                   hInstance,
@@ -77,7 +79,7 @@ WinMain(HINSTANCE hInstance,
             for(;;)
             {
                 MSG Message;
-                BOOL WINAPI MessageResult = GetMessage(&Message, 0, 0, 0);
+                BOOL MessageResult = GetMessage(&Message, 0, 0, 0);
                 if(MessageResult > 0)
                 {
                     TranslateMessage(&Message);
