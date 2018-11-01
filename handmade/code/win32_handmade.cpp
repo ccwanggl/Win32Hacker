@@ -8,32 +8,37 @@
 //TODO(guoliang): This is a global for now
 global_variable bool Running;
 
-
 global_variable BITMAPINFO BitmapInfo;
 global_variable void *BitmapMemory;
 global_variable HBITMAP BitmapHandle;
+global_variable HDC BitmapDeviceContext;
 
 internal void
 win32ResizeDIBSection(int Width, int Height)
 {
+    //TODO(guoliang): Bulletproof this.
 	if (BitmapHandle)
 	{
 		DeleteObject(BitmapHandle);
 	}
+    else
+    {
+        BitmapDeviceContext = CreateCompatibleDC(0);
+    }
 
 	BitmapInfo.bmiHeader.biSize = sizeof(BitmapInfo.bmiHeader);
 	BitmapInfo.bmiHeader.biWidth = Width;
 	BitmapInfo.bmiHeader.biHeight = Height;
 	BitmapInfo.bmiHeader.biPlanes = 1;
 	BitmapInfo.bmiHeader.biBitCount = 32;
-	BitmapInfo.bmiHeader.biSizeImage = 0;
 	BitmapInfo.bmiHeader.biCompression = BI_RGB;
+	BitmapInfo.bmiHeader.biSizeImage = 0;
 	BitmapInfo.bmiHeader.biXPelsPerMeter = 0;
 	BitmapInfo.bmiHeader.biYPelsPerMeter = 0;
 	BitmapInfo.bmiHeader.biClrUsed = 0;
 	BitmapInfo.bmiHeader.biClrImportant = 0;
 
-	HDC DeviceContext = GetCompatibleDC(0);
+
 
 	BitmapHandle = CreateDIBSection(DeviceContext,
 		&BitmapInfo,
