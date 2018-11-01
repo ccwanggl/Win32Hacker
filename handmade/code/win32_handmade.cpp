@@ -21,7 +21,7 @@ win32ResizeDIBSection(int Width, int Height)
 	{
 		DeleteObject(BitmapHandle);
 	}
-    else
+    if(!BitmapDeviceContext)
     {
         BitmapDeviceContext = CreateCompatibleDC(0);
     }
@@ -40,12 +40,12 @@ win32ResizeDIBSection(int Width, int Height)
 
 
 
-	BitmapHandle = CreateDIBSection(DeviceContext,
+	BitmapHandle = CreateDIBSection(BitmapDeviceContext,
 		&BitmapInfo,
 		DIB_RGB_COLORS,
 		&BitmapMemory,
 		0, 0);
-	ReleaseDC(0, DeviceContext);
+	ReleaseDC(0, BitmapDeviceContext);
 }
 
 internal void
@@ -54,7 +54,8 @@ win32UpdateWindow(HDC DeviceContext, int X, int Y, int Width, int Height)
 	StretchDIBits(DeviceContext,
 		X, Y, Width, Height,
 		X, Y, Width, Height,
-
+		BitmapMemory,
+		&BitmapInfo,
 		DIB_RGB_COLORS,
 		SRCCOPY);
 }
