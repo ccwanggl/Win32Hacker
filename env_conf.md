@@ -1,3 +1,11 @@
-1. edit statup.bat(/c/Users/tswan/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup) file with content "subst w: c:\User\...."
-2. add cl.exe to the PATH (change the cmder init.bat file)
-3.
+# Handmade Hero dev Log
+
+## Set the dev Env
+
+### Edit shell.bat(/c/Users/guoliang/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/shell.bat) file with content "subst w: c:\User\...."
+
+
+### Call `vcvarsall.bat x64` at cmd startup or cmder (change the cmder init.bat file)
+
+
+### Build scripts update
