@@ -33,6 +33,7 @@ struct win32_window_dimension
 };
 
 //TODO(guoliang): This is a global for now
+
 global_variable bool					Running;
 global_variable win32_offscreen_buffer	GlobalBackbuffer;
 
@@ -79,6 +80,7 @@ internal void
 Win32ResizeDIBSection(win32_offscreen_buffer *Buffer, int Width, int Height)
 {
        //TODO(guoliang): Bulletproof this.
+	   
        //Maybe don't free first, free after, then free first of that fails.
 
 	if(Buffer->Memory)
@@ -198,7 +200,7 @@ WinMain(HINSTANCE hInstance,
 
     if(RegisterClass(&WindowClass))
     {
-	HWND Window= CreateWindowExA(
+		HWND Window= CreateWindowExA(
                   0,
                   WindowClass.lpszClassName,
 				  "Handmade Hero",
@@ -213,40 +215,40 @@ WinMain(HINSTANCE hInstance,
                   0);
         if(Window)
         {
-		Running = true;
-		int XOffset = 0;
-		int YOffset = 0;
+			Running = true;
+			int XOffset = 0;
+			int YOffset = 0;
 
 		    while(Running)
 		    {
-			MSG Message;
-			while(PeekMessageA(&Message, 0, 0, 0, PM_REMOVE))
-			{
-				if(Message.message == WM_QUIT)
+				MSG Message;
+				while(PeekMessageA(&Message, 0, 0, 0, PM_REMOVE))
 				{
-					Running = false;
+					if(Message.message == WM_QUIT)
+					{
+						Running = false;
+					}
+					TranslateMessage(&Message);
+					DispatchMessageA(&Message);
 				}
-			    TranslateMessage(&Message);
-			    DispatchMessageA(&Message);
+				RenderWeirdGradient(GlobalBackbuffer, XOffset, YOffset);
+
+				HDC DeviceContext = GetDC(Window);
+
+				win32_window_dimension Dimension = Win32GetWindowDimension(Window);
+				Win32DisplayBufferInWindow(DeviceContext, 
+						Dimension.Width, Dimension.Height, 
+						GlobalBackbuffer, 
+						0, 0, 
+						Dimension.Width, 
+						Dimension.Height
+				);
+
+				ReleaseDC(Window, DeviceContext);
+
+				++XOffset;
+				YOffset += 2;
 			}
-			RenderWeirdGradient(GlobalBackbuffer, XOffset, YOffset);
-
-			HDC DeviceContext = GetDC(Window);
-
-			win32_window_dimension Dimension = Win32GetWindowDimension(Window);
-			Win32DisplayBufferInWindow(DeviceContext, 
-					Dimension.Width, Dimension.Height, 
-					GlobalBackbuffer, 
-					0, 0, 
-					Dimension.Width, 
-					Dimension.Height
-			);
-
-			ReleaseDC(Window, DeviceContext);
-
-			++XOffset;
-			YOffset += 2;
-		    }
         }
         else
         {
