@@ -2,9 +2,9 @@
 #include <stdint.h>
 
 
-#define internal			static 
-#define local_persist		static 
-#define global_variable		static 
+#define internal			static
+#define local_persist		static
+#define global_variable		static
 
 typedef int8_t				int8;
 typedef int16_t				int16;
@@ -80,7 +80,7 @@ internal void
 Win32ResizeDIBSection(win32_offscreen_buffer *Buffer, int Width, int Height)
 {
        //TODO(guoliang): Bulletproof this.
-	   
+
        //Maybe don't free first, free after, then free first of that fails.
 
 	if(Buffer->Memory)
@@ -93,7 +93,7 @@ Win32ResizeDIBSection(win32_offscreen_buffer *Buffer, int Width, int Height)
 	Buffer->BytesPerPixel	= 4;
 
 	//NOTE(guoliang): When the biHeight field is negative. this is the clue to windows to treat
-	//this bitmap as top_down, not bottom-up. meaning that the first three bytes of the image are 
+	//this bitmap as top_down, not bottom-up. meaning that the first three bytes of the image are
 	//the color for the top left pixel in the bitmap, not the bottom left.
 
 	Buffer->Info.bmiHeader.biSize			= sizeof(Buffer->Info.bmiHeader);
@@ -105,7 +105,7 @@ Win32ResizeDIBSection(win32_offscreen_buffer *Buffer, int Width, int Height)
 
 	//NOTE: Thank you to Chris Hecker of Spy party fame
 	//for claritying the deal with StretchDIBits and BitBle!
-	
+
 	int BitmapMemorySize	= (Buffer->Width * Buffer->Height) * Buffer->BytesPerPixel;
 	Buffer->Memory			= VirtualAlloc(0, BitmapMemorySize, MEM_COMMIT, PAGE_READWRITE);
 	Buffer->Pitch			= Width * Buffer->BytesPerPixel;
@@ -115,10 +115,10 @@ Win32ResizeDIBSection(win32_offscreen_buffer *Buffer, int Width, int Height)
 }
 
 internal void
-Win32DisplayBufferInWindow(HDC DeviceContext, 
+Win32DisplayBufferInWindow(HDC DeviceContext,
 			   int WindowWidth,
 			   int WindowHeight,
-			   win32_offscreen_buffer Buffer, 
+			   win32_offscreen_buffer Buffer,
 			   int X, int Y, int Width, int Height)
 {
 	//TODO(guoliang): Aspect ratio correction
@@ -131,7 +131,7 @@ Win32DisplayBufferInWindow(HDC DeviceContext,
 			SRCCOPY);
 }
 
-LRESULT CALLBACK 
+LRESULT CALLBACK
 Win32MainWindowCallback(HWND Window,
            UINT Message,
            WPARAM wParam,
@@ -168,8 +168,8 @@ Win32MainWindowCallback(HWND Window,
 		    int Height	= Paint.rcPaint.bottom - Paint.rcPaint.top;
 
 		    win32_window_dimension Dimension = Win32GetWindowDimension(Window);
-		    Win32DisplayBufferInWindow(DeviceContext, 
-				    Dimension.Width, Dimension.Height, 
+		    Win32DisplayBufferInWindow(DeviceContext,
+				    Dimension.Width, Dimension.Height,
 				    GlobalBackbuffer,
 				    X, Y, Width, Height);
 
@@ -183,10 +183,10 @@ Win32MainWindowCallback(HWND Window,
     return Result;
 }
 
-int CALLBACK 
-WinMain(HINSTANCE hInstance, 
-		     HINSTANCE hPrevInstance, 
-		     LPSTR lpCmdLine, 
+int CALLBACK
+WinMain(HINSTANCE hInstance,
+		     HINSTANCE hPrevInstance,
+		     LPSTR lpCmdLine,
 		     int nCmdShow)
 {
     WNDCLASS WindowClass = {};
@@ -195,7 +195,7 @@ WinMain(HINSTANCE hInstance,
 
     WindowClass.style           = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
     WindowClass.lpfnWndProc     = Win32MainWindowCallback;
-    WindowClass.hInstance       = hInstance; 
+    WindowClass.hInstance       = hInstance;
     WindowClass.lpszClassName   = "HandmadeHeroWindowClass";
 
     if(RegisterClass(&WindowClass))
@@ -236,11 +236,11 @@ WinMain(HINSTANCE hInstance,
 				HDC DeviceContext = GetDC(Window);
 
 				win32_window_dimension Dimension = Win32GetWindowDimension(Window);
-				Win32DisplayBufferInWindow(DeviceContext, 
-						Dimension.Width, Dimension.Height, 
-						GlobalBackbuffer, 
-						0, 0, 
-						Dimension.Width, 
+				Win32DisplayBufferInWindow(DeviceContext,
+						Dimension.Width, Dimension.Height,
+						GlobalBackbuffer,
+						0, 0,
+						Dimension.Width,
 						Dimension.Height
 				);
 
@@ -259,6 +259,6 @@ WinMain(HINSTANCE hInstance,
     {
         //TODO
     }
-    
+
 	return 0;
 }
