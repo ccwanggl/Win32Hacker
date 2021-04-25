@@ -145,7 +145,7 @@ Win32MainWindowCallback(HWND Window,
         }break;
         case WM_CLOSE:
         {
-			//TODO: Handle this with a message to the user?
+			//TODO(guoliang): Handle this with a message to the user?
 			Running = false;
         }break;
         case WM_ACTIVATEAPP:
@@ -155,7 +155,7 @@ Win32MainWindowCallback(HWND Window,
         case WM_DESTROY:
         {
 			Running = false;
-			//TODO: Handle this as an error - recreate window?
+			//TODO(guoliang): Handle this as an error - recreate window?
         }break;
         case WM_PAINT:
         {
@@ -253,7 +253,7 @@ WinMain(HINSTANCE hInstance,
         }
         else
         {
-            //TODO()
+            //TODO(guoliang)
         }
     }
     else
