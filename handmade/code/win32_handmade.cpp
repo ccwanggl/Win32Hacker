@@ -2,28 +2,28 @@
 #include <stdint.h>
 
 
-#define internal			static
+#define internal		static
 #define local_persist		static
 #define global_variable		static
 
-typedef int8_t				int8;
-typedef int16_t				int16;
-typedef int32_t				int32;
-typedef int64_t				int64;
+typedef int8_t			int8;
+typedef int16_t			int16;
+typedef int32_t			int32;
+typedef int64_t			int64;
 
-typedef uint8_t				uint8;
-typedef uint16_t			uint16;
-typedef uint32_t			uint32;
-typedef uint64_t			uint64;
+typedef uint8_t			uint8;
+typedef uint16_t		uint16;
+typedef uint32_t		uint32;
+typedef uint64_t		uint64;
 
 struct win32_offscreen_buffer
 {
 	BITMAPINFO	Info;
 	void		*Memory;
-	int			Width;
-	int			Height;
-	int			Pitch;
-	int			BytesPerPixel;
+	int		Width;
+	int		Height;
+	int		Pitch;
+	int		BytesPerPixel;
 };
 
 struct win32_window_dimension
@@ -123,10 +123,10 @@ Win32DisplayBufferInWindow(HDC DeviceContext,
 {
 	//TODO(guoliang): Aspect ratio correction
 	StretchDIBits(DeviceContext,
-			0, 0, WindowWidth, WindowHeight,
-			0, 0, Buffer.Width, Buffer.Height,
-			Buffer.Memory,
-			&Buffer.Info,
+			0, 0, WindowWidth, WindowHeight, 			// rectangle wants to be full
+			0, 0, Buffer.Width, Buffer.Height,			// buffer size 
+			Buffer.Memory,                              // buffer address
+			&Buffer.Info,                               // BITMAPINFO
 			DIB_RGB_COLORS,
 			SRCCOPY);
 }
@@ -193,7 +193,7 @@ WinMain(HINSTANCE hInstance,
 
     Win32ResizeDIBSection(&GlobalBackbuffer, 1280, 720);
 
-    WindowClass.style           = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
+    WindowClass.style           = CS_HREDRAW | CS_VREDRAW;
     WindowClass.lpfnWndProc     = Win32MainWindowCallback;
     WindowClass.hInstance       = hInstance;
     WindowClass.lpszClassName   = "HandmadeHeroWindowClass";
@@ -231,6 +231,7 @@ WinMain(HINSTANCE hInstance,
 					TranslateMessage(&Message);
 					DispatchMessageA(&Message);
 				}
+
 				RenderWeirdGradient(GlobalBackbuffer, XOffset, YOffset);
 
 				HDC DeviceContext = GetDC(Window);
@@ -252,12 +253,12 @@ WinMain(HINSTANCE hInstance,
         }
         else
         {
-            //TODO
+            //TODO()
         }
     }
     else
     {
-        //TODO
+        //TODO(guoliang)
     }
 
 	return 0;
