@@ -253,12 +253,12 @@ WinMain(HINSTANCE hInstance,
         }
         else
         {
-            //TODO(guoliang)
+            //TODO(guoliang): Logging
         }
     }
     else
     {
-        //TODO(guoliang)
+        //TODO(guoliang): Logging
     }
 
 	return 0;
