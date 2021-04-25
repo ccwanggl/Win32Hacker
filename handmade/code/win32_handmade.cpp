@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 
-#define internal		static
+#define internal			static
 #define local_persist		static
 #define global_variable		static
 
@@ -189,7 +189,7 @@ WinMain(HINSTANCE hInstance,
 		     LPSTR lpCmdLine,
 		     int nCmdShow)
 {
-    WNDCLASS WindowClass = {};
+    WNDCLASS WindowClass{};
 
     Win32ResizeDIBSection(&GlobalBackbuffer, 1280, 720);
 
