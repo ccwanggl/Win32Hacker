@@ -33,7 +33,6 @@ struct win32_window_dimension
 };
 
 //TODO(guoliang): This is a global for now
-
 global_variable bool					Running;
 global_variable win32_offscreen_buffer	GlobalBackbuffer;
 
@@ -79,9 +78,8 @@ RenderWeirdGradient(win32_offscreen_buffer Buffer, int BlueXOffset, int GreenYOf
 internal void
 Win32ResizeDIBSection(win32_offscreen_buffer *Buffer, int Width, int Height)
 {
-       //TODO(guoliang): Bulletproof this.
-
-       //Maybe don't free first, free after, then free first of that fails.
+    //TODO(guoliang): Bulletproof this.
+    //Maybe don't free first, free after, then free first of that fails.
 
 	if(Buffer->Memory)
 	{
@@ -124,11 +122,12 @@ Win32DisplayBufferInWindow(HDC DeviceContext,
 	//TODO(guoliang): Aspect ratio correction
 	StretchDIBits(DeviceContext,
 			0, 0, WindowWidth, WindowHeight, 			// rectangle wants to be full
-			0, 0, Buffer.Width, Buffer.Height,			// buffer size 
+			0, 0, Buffer.Width, Buffer.Height,			// buffer size
 			Buffer.Memory,                              // buffer address
 			&Buffer.Info,                               // BITMAPINFO
 			DIB_RGB_COLORS,
-			SRCCOPY);
+			SRCCOPY
+		);
 }
 
 LRESULT CALLBACK
@@ -171,7 +170,11 @@ Win32MainWindowCallback(HWND Window,
 		    Win32DisplayBufferInWindow(DeviceContext,
 				    Dimension.Width, Dimension.Height,
 				    GlobalBackbuffer,
-				    X, Y, Width, Height);
+				    X,
+					Y,
+					Width,
+					Height
+				);
 
             EndPaint(Window, &Paint);
         }break;
