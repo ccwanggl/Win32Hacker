@@ -192,6 +192,9 @@ WinMain(HINSTANCE hInstance,
 		     LPSTR lpCmdLine,
 		     int nCmdShow)
 {
+	//TODO(guoliang): stack overflow
+	// uint8 BigOldBlockOfMemory[2 * 1024 * 1024] ={};
+
     WNDCLASS WindowClass{};
 
     Win32ResizeDIBSection(&GlobalBackbuffer, 1280, 720);
@@ -218,6 +221,9 @@ WinMain(HINSTANCE hInstance,
                   0);
         if(Window)
         {
+			//NOTE(guoliang): Since we specified CS_OWNDC, we can just get one device context and use it forever
+			// because we are note sharing it with anyone.
+			
 			Running = true;
 			int XOffset = 0;
 			int YOffset = 0;
